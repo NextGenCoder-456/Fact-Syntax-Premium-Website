@@ -2,8 +2,6 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 
-import { NextResponse } from 'next/server';
-
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 const CHANNEL_HANDLE = '@FactSyntax';
 
@@ -13,7 +11,6 @@ export async function GET() {
       return NextResponse.json({ error: 'API key missing' }, { status: 500 });
     }
 
-    // Step 1: Handle se uploads playlist ID nikalo
     const channelRes = await fetch(
       `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=${CHANNEL_HANDLE}&key=${YOUTUBE_API_KEY}`,
       { next: { revalidate: 3600 } }
@@ -26,7 +23,6 @@ export async function GET() {
 
     const uploadsPlaylistId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
 
-    // Step 2: Playlist se latest videos nikalo
     const videosRes = await fetch(
       `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=12&key=${YOUTUBE_API_KEY}`,
       { next: { revalidate: 3600 } }
